@@ -18,6 +18,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+      // 로그인 여부 로직 필요
+      
         $credentials = $request->only('email', 'password');
 
         // 서비스의 메서드를 호출하여 비즈니스 로직 실행
