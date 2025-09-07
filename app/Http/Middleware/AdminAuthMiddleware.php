@@ -22,6 +22,8 @@ class AdminAuthMiddleware
         return redirect()->route('admin.index');
       }
 
+      return $next($request);
+
       // access-admin 권한으로 대체
       // 어드민 페이지에 접근 권한이 없는 경우 일반 페이지로 이동
       // if(in_array($user->role, ['admin', 'manager'])) {
