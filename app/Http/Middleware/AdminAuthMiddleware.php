@@ -19,7 +19,7 @@ class AdminAuthMiddleware
       // 로그인이 안되어있다면 로그인 페이지로 이동
       $user = auth()->user();
       if(!$user) {
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.login');
       }
 
       return $next($request);

@@ -18,20 +18,24 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-      // 로그인 여부 로직 필요
-      
-        $credentials = $request->only('email', 'password');
-
-        // 서비스의 메서드를 호출하여 비즈니스 로직 실행
-        if ($this->authService->processLogin($credentials)) {
-            // 인증 성공 시 리디렉션
-            return redirect()->intended('admin/dashboard');
+        // 이미 로그인된 경우 대시보드로 이동
+        if ($this->authService->check()) {
+            return redirect()->route('admin.dashboard');
         }
 
-        // 인증 실패 시 에러 메시지 반환
-        return back()->withErrors([
-            'email' => '메일 또는 패스워드가 틀렸습니다.',
-        ]);
+        if ($request->isMethod('post')) {
+            $credentials = $request->only('email', 'password');
+            if ($this->authService->processLogin($credentials)) {
+                return redirect()->intended('admin/dashboard');
+            }
+            // 인증 실패 시 에러 메시지와 입력값 유지
+            return back()->withErrors([
+                'email' => '메일 또는 패스워드가 틀렸습니다.',
+            ])->withInput($request->only('email'));
+        }
+
+        // GET 요청이면 로그인 폼 반환
+        return view('admin.login');
     }
     public function logout(Request $request)
     {

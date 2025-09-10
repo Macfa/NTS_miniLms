@@ -41,14 +41,14 @@ class ProgramServiceTest extends TestCase
                 [
                     'start' => '2024-07-01 10:00:00',
                     'end' => '2024-07-01 12:00:00',
-                    'week_days' => 'Mon,Wed,Fri',
-                    'status' => 'scheduled',
+                    'week_days' => '0,2,4',
+                    'status' => '1',
                 ],
                 [
                     'start' => '2024-07-03 10:00:00',
                     'end' => '2024-07-03 12:00:00',
-                    'week_days' => 'Tue,Thu',
-                    'status' => 'scheduled',
+                    'week_days' => '2,4',
+                    'status' => '1',
                 ],
             ],
         ];

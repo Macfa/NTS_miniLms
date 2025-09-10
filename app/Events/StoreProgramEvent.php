@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Program;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,6 +16,7 @@ class StoreProgramEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public Program $program;
+    // public User $user;
     /**
      * Create a new event instance.
      */

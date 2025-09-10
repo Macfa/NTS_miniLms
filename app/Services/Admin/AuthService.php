@@ -23,4 +23,11 @@ class AuthService
         // 인증 실패
         return false;
     }
+    /**
+     * 현재 로그인 상태인지 확인
+     */
+    public function check(): bool
+    {
+        return Auth::check();
+    }    
 }

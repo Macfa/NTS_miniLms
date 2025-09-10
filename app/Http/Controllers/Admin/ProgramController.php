@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\StoreProgramEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProgramRequest;
 // use App\Http\Requests\UpdateProgramRequest;
@@ -27,6 +28,7 @@ class ProgramController extends Controller
     public function index() 
     {
         $programs = $this->programService->getProgramWithUsers();
+        StoreProgramEvent::dispatch($programs[0]);
         return view('admin.program.index', compact('programs'));
     }
 

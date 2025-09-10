@@ -13,8 +13,8 @@ Route::get('/', function () {
 });
 
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('login', [AuthController::class, 'login'])->name('admin.login');
+    Route::match(['get', 'post'], '/', [AuthController::class, 'login'])->name('admin.login');
+    // Route::post('login', [AuthController::class, 'login'])->name('admin.login');
     Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
     Route::middleware([AdminAuthMiddleware::class, 'can:access-admin'])->group(function () {
