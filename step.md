@@ -9,3 +9,9 @@
   2. 어드민
     - role
     
+
+authrization ( 인가 )
+ - 특정 대상에게 특정 기능을 허용
+
+authentication ( 인증 ) 
+ - 

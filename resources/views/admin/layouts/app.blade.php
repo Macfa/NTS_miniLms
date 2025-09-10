@@ -12,6 +12,7 @@
             background-color: #f3f4f6;
         }
     </style>
+    @stack('styles')
 </head>
 <body>
     <div class="flex flex-col min-h-screen">
@@ -23,8 +24,8 @@
                   <a href="{{ route('admin.dashboard') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">대시보드</a>
                   <a href="{{ route('admin.student.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">회원 관리</a>
                   <a href="{{ route('admin.manager.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">강사 관리</a>
-                  {{-- <a href="{{ route('admin.course.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">강좌 관리</a>
-                  <a href="{{ route('admin.payment.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">결제 관리</a> --}}
+                  <a href="{{ route('admin.program.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">프로그램 관리</a>
+                  {{-- <a href="{{ route('admin.payment.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">결제 관리</a> --}}
 
                     <!-- 로그아웃 버튼 -->
                     <form action="{{ route('admin.logout') }}" method="POST" class="inline">
@@ -45,5 +46,6 @@
             &copy; 2024 Mini LMS. All Rights Reserved.
         </footer>
     </div>
+    @stack('scripts')
 </body>
 </html>

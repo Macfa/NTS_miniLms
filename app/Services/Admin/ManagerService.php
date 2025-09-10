@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class ManagerService
 {
+  protected Manager $manager;
+
+  public function __construct(Manager $manager) {
+    $this->manager = $manager;
+  }
     /**
      * 강사 정보를 생성하고 저장합니다.
      * @param array $data
@@ -52,7 +57,7 @@ class ManagerService
             if (isset($data['password']) && $data['password'] !== null) {
                 $userData['password'] = Hash::make($data['password']);
             }
-            
+
             $user->update($userData);
 
             return $manager;
@@ -77,8 +82,8 @@ class ManagerService
             return true;
         });
     }
-    public function getStudentsWithUsers()
+    public function getManagersWithUser()
     {
-      return Manager::with('user')->get();
+      return $this->manager->with('user')->get();
     }
 }

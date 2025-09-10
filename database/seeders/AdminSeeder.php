@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Manager;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -37,6 +38,17 @@ class AdminSeeder extends Seeder
         ]);
 
         Manager::create([
+            'user_id' => $user->id,
+        ]);
+
+        $user = User::create([
+            'name' => '학생',
+            'email' => 'student@student.com',
+            'role' => 'student',
+            'password' => Hash::make('student'),
+        ]);
+
+        Student::create([
             'user_id' => $user->id,
         ]);
       });

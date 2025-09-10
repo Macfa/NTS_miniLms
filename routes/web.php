@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\ManagerController;
+use App\Http\Controllers\Admin\ProgramController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,5 +21,6 @@ Route::prefix('admin')->group(function () {
       Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
       Route::resource('student', StudentController::class, ['as' => 'admin']); // 학생 관리 라우트
       Route::resource('manager', ManagerController::class, ['as' => 'admin']); // 강사 관리 라우트
+      Route::resource('program', ProgramController::class, ['as' => 'admin']); // 프로그램 관리 라우트
     });
 });

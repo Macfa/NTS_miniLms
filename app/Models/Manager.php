@@ -15,4 +15,8 @@ class Manager extends Model
   {
       return $this->user->status ? '활성화' : '비활성화';
   }    
+  public function programs()
+  {
+    return $this->hasMany(Program::class, 'manager_id', 'id');
+  }
 }

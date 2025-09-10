@@ -22,11 +22,11 @@ class StudentController extends Controller
     {
       // 사용자 목록을 가져와서 뷰에 전달
       $students = $this->studentService->getStudentsWithUsers();
-      return view('admin.students.index', compact('students'));
+      return view('admin.student.index', compact('students'));
     }
     public function create() 
     {
-      return view('admin.students.create');
+      return view('admin.student.create');
     }
     public function store(StoreStudentRequest $request) 
     {
@@ -39,13 +39,13 @@ class StudentController extends Controller
     {
       // show는 보통 특정 학생의 상세 정보를 보여줌
       $student = Student::with('user')->findOrFail($id);
-      return view('admin.students.show', compact('student'));
+      return view('admin.student.show', compact('student'));
     }
     public function edit(int $id) 
     {
       // 수정 폼을 보여주기 위해 학생 정보 로드
       $student = Student::with('user')->findOrFail($id);
-      return view('admin.students.edit', compact('student'));
+      return view('admin.student.edit', compact('student'));
     }
     public function update(UpdateStudentRequest $request, int $id) 
     {
@@ -57,6 +57,6 @@ class StudentController extends Controller
     public function destroy(int $id) 
     {
       $this->studentService->deleteStudent($id);
-      return redirect()->route('admin.students.index')->with('success', '학생이 성공적으로 삭제되었습니다.');
+      return redirect()->route('admin.student.index')->with('success', '학생이 성공적으로 삭제되었습니다.');
     }
 }

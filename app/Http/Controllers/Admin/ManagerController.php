@@ -21,7 +21,7 @@ class ManagerController extends Controller
     public function index() 
     {
       // 사용자 목록을 가져와서 뷰에 전달
-      $managers = $this->managerService->getStudentsWithUsers();
+      $managers = $this->managerService->getManagersWithUser();
       return view('admin.manager.index', compact('managers'));
     }
     public function create() 
