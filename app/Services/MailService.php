@@ -18,8 +18,6 @@ class MailService
     $this->program = $program;
     // 이메일 전송 로직 구현
     $recipients = $this->program->user()->pluck('email')->toArray();
-    // dd($recipients);
-    // \Mail::to($recipients)->queue(new StoredProgramMail($this->program));
     \Mail::to($recipients)->queue(new StoredProgramMail($this->program));
   }
 }

@@ -28,7 +28,6 @@ class ProgramController extends Controller
     public function index() 
     {
         $programs = $this->programService->getProgramWithUsers();
-        StoreProgramEvent::dispatch($programs[0]);
         return view('admin.program.index', compact('programs'));
     }
 

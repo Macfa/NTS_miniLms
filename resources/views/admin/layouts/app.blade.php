@@ -23,7 +23,9 @@
                 <nav>
                   <a href="{{ route('admin.dashboard') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">대시보드</a>
                   <a href="{{ route('admin.student.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">회원 관리</a>
+                  @can('is-admin')
                   <a href="{{ route('admin.manager.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">강사 관리</a>
+                  @endcan
                   <a href="{{ route('admin.program.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">프로그램 관리</a>
                   {{-- <a href="{{ route('admin.payment.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">결제 관리</a> --}}
 

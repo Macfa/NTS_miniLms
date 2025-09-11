@@ -24,7 +24,9 @@ class AdminServiceProvider extends ServiceProvider
         Gate::define('access-admin', function ($user) {
             return in_array($user->role, ['admin', 'manager']);
         });
-        // 매니저의 기능 차단
-        // Gate::
+        // 관리자만
+        Gate::define('is-admin', function ($user) {
+            return $user->role === 'admin';
+        });
     }
 }

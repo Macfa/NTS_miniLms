@@ -47,4 +47,9 @@ class ProgramService
     $programs = $this->programModel->withTrashed()->get();
     return $programs;
   }
+  public function deleteProgram(int $id)
+  {
+    $program = $this->programModel->findOrFail($id);
+    return $program->delete();
+  }
 }

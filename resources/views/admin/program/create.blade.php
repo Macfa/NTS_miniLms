@@ -90,19 +90,21 @@
         <div class="text-danger small">{{ $message }}</div>
         @enderror
       </div>
-      
-      <div class="mb-3">
-        <label class="form-label">승인 상태</label>
-        <select name="approval_status" class="form-select">
-          <option value="1" @if(old('approval_status')=="1") selected @endif>승인</option>
-          <option value="2" @if(old('approval_status')=="2") selected @endif>승인 대기</option>
-          <option value="3" @if(old('approval_status')=="3") selected @endif>승인 거부</option>
-        </select>
-        @error('approval_status')
-        <div class="text-danger small">{{ $message }}</div>
-        @enderror
-      </div>
-      
+
+      @can('is-admin')
+<div class="mb-3">
+  <label class="form-label">승인 상태</label>
+  <select name="approval_status" class="form-select">
+    <option value="1" @if(old('approval_status', $program->approval_status ?? '')=="1") selected @endif>승인</option>
+    <option value="2" @if(old('approval_status', $program->approval_status ?? '')=="2") selected @endif>승인 대기</option>
+    <option value="3" @if(old('approval_status', $program->approval_status ?? '')=="3") selected @endif>승인 거부</option>
+  </select>
+  @error('approval_status')
+  <div class="text-danger small">{{ $message }}</div>
+  @enderror
+</div>
+@endcan
+
       <!-- 챕터 리스트 테이블 -->
       <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
