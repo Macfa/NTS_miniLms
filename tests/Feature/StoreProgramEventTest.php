@@ -15,6 +15,7 @@ class StoreProgramEventTest extends TestCase
 
     public function test_store_program_event_is_dispatched()
     {
+      // 개선 필요
         Event::fake();
 
         // 유저, 매니저, 프로그램, 챕터 생성

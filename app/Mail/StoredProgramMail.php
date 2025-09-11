@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Program;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,13 +15,13 @@ use Illuminate\Mail\Mailables\Address;
 class StoredProgramMail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public Program $program;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Program $program)
     {
-        //
+        $this->program = $program;
     }
 
     /**
@@ -29,11 +30,11 @@ class StoredProgramMail extends Mailable
     public function envelope(): Envelope
     {
       return new Envelope(
-          from: new Address('jeffrey@example.com', 'Jeffrey Way'),
+          from: new Address('service@yourdomain.com', '관리자'),
           replyTo: [
-              new Address('taylor@example.com', 'Taylor Otwell'),
+              new Address('kombo67688@gmail.com', '관리자'),
           ],
-          subject: 'Order Shipped',
+          subject: '프로그램 등록 승인요청',
       );
     }
 
@@ -43,7 +44,11 @@ class StoredProgramMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'admin.mail.program.store',
+            with: [
+                'manager' => $this->program->user->name,
+                'title' => $this->program->name,
+            ],
         );
     }
 
