@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Admin;
@@ -11,7 +12,7 @@ use App\Models\Admin;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -59,4 +60,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Manager::class, 'user_id', 'id');
     }
-}
+    public function getStatusAttribute(): string
+    {
+        return $this->attributes['status'] ? '활성화' : '비활성화';
+    }
+  }
