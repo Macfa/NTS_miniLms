@@ -1,0 +1,26 @@
+{
+  "Copilot Instructions Prefix": {
+    "prefix": "1]",
+    "body": [
+      "@workspace copilot-instructions.md 참고해서 작성해줘",
+      "$0"
+    ],
+    "description": "Copilot Chat에서 copilot-instructions.md 항상 참고"
+  },
+  "Copilot JS Instructions Prefix": {
+    "prefix": "2]",
+    "body": [
+      "@workspace js-instructure.md 참고해서 작성해줘",
+      "$0"
+    ],
+    "description": "Copilot Chat에서 js-instruction.md 항상 참고"
+  },
+  "Copilot PHP Instructions Prefix": {
+    "prefix": "3]",
+    "body": [
+      "@workspace php-instructure.md 참고해서 작성해줘",
+      "$0"
+    ],
+    "description": "Copilot Chat에서 php-instruction.md 항상 참고"
+  },
+}
