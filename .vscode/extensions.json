@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "laravel.vscode-laravel",
+    "onecentlin.laravel-blade",
+    "onecentlin.laravel5-snippets",
+    "devsense.phptools-vscode",
+    "zobo.php-intellisense",
+    "xdebug.php-pack"
+  ]
+}

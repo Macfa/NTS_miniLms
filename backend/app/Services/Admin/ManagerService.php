@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Services\Admin;
+
+use App\Models\User;
+use App\Models\Manager;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class ManagerService
+{
+    protected User $user;
+    protected Manager $manager;
+
+    public function __construct(User $user, Manager $manager)
+    {
+        $this->user = $user;
+        $this->manager = $manager;
+    }
+    /**
+     * 강사 검색 (이름/이메일)
+     */
+    public function searchManagers($keyword)
+    {
+            return $this->manager->with('user')
+            ->whereHas('user', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%$keyword%")
+                      ->orWhere('email', 'like', "%$keyword%");
+            })
+            ->get();
+    }
+    /**
+     * 강사 일괄 삭제
+     */
+    public function deleteManagers(array $userIds)
+    {
+        return \DB::transaction(function () use ($userIds) {
+                $managers = $this->manager->with('user')->whereIn('user_id', $userIds)->get();
+            foreach ($managers as $manager) {
+                $user = $manager->user;
+                $manager->delete();
+                $user->delete();
+            }
+            return true;
+        });
+    }
+    /**
+     * 강사 정보를 생성하고 저장합니다.
+     * @param array $data
+     * @return \App\Models\User
+     */
+    public function createManager(array $data): User
+    {
+        return DB::transaction(function () use ($data) {
+                $user = $this->user->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'status' => $data['status'],
+                'role' => 'manager',
+                'password' => Hash::make($data['password']),
+            ]);
+
+                $this->manager->create([
+                'user_id' => $user->id,
+            ]);
+
+            return $user;
+        });
+    }
+
+    /**
+     * 강사 정보를 수정합니다.
+     *
+     * @param int $id 학생의 ID
+     * @param array $data 수정할 데이터
+     * @return Manager 수정된 Manager 모델 인스턴스
+     */
+    public function updateManager(int $id, array $data): Manager
+    {
+        return DB::transaction(function () use ($id, $data) {
+                $manager = $this->manager->with('user')->where('user_id', $id)->firstOrFail();
+            $user = $manager->user;
+
+            $userData = [
+                'name' => $data['name'] ?? $user->name,
+                'email' => $data['email'] ?? $user->email,
+                'status' => $data['status'] ?? $user->email,
+                'updated_at' => now(),
+            ];
+
+            if (isset($data['password']) && $data['password'] !== null) {
+                $userData['password'] = Hash::make($data['password']);
+            }
+
+            $user->update($userData);
+
+            return $manager;
+        });
+    }
+
+    /**
+     * 강사 정보를 삭제합니다.
+     *
+     * @param int $id 학생의 ID
+     * @return bool 삭제 성공 여부
+     */ 
+    public function deleteManager(int $id): bool
+    {
+        return DB::transaction(function () use ($id) {
+                $manager = $this->manager->with('user')->where('user_id', $id)->firstOrFail();
+            $user = $manager->user;
+
+            $manager->delete();
+            $user->delete();
+
+            return true;
+        });
+    }
+    public function getManagersWithUser()
+    {
+            return $this->manager->with('user')->get();
+    }
+}
