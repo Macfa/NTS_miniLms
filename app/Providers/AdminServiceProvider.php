@@ -20,13 +20,13 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-      // 관리자 페이지 대상
-        Gate::define('access-admin', function ($user) {
-            return in_array($user->role, ['admin', 'manager']);
-        });
-        // 관리자만
-        Gate::define('is-admin', function ($user) {
-            return $user->role === 'admin';
-        });
+      // // 관리자 페이지 대상
+      //   Gate::define('access-admin-page', function ($user) {
+      //       return in_array($user->role, ['admin', 'manager']);
+      //   });
+      //   // 관리자만
+      //   Gate::define('is-admin', function ($user) {
+      //       return $user->role === 'admin';
+      //   });
     }
 }
