@@ -16,8 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('program_id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('content');
-            $table->string('video_url')->nullable();
             $table->dateTime("start");
             $table->dateTime("end");
             $table->string('week_days')->comment("수업 요일 (예: '0(Mon),2(Wed)')");

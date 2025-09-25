@@ -1,7 +1,8 @@
+MiniLMS
+
 * **Architecture**
   * Controller = HTTP 처리
   * Service = 비즈니스 로직
-  * Repository = DB 접근
   * Event/Listener = 부수적 처리
 
 * **Event/Listenr**

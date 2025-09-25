@@ -8,11 +8,14 @@
 @endpush
 
 @section('content')
+@error('*')
+  <div class="text-danger small">{{ $message }}</div>
+@enderror
 <div class="container mx-auto p-8">
   <h1 class="text-4xl font-bold mb-8 text-gray-800">프로그램 생성</h1>
   
   <div class="bg-white rounded-lg shadow-md p-6">
-    <form action="{{ route('admin.program.store') }}" method="POST" id="programForm">
+    <form action="{{ route('admin.program.store') }}" method="POST" id="programForm" enctype="multipart/form-data">
       @csrf
       
       <div class="mb-3">
@@ -45,7 +48,7 @@
           <option value="" disabled selected>강사를 선택하세요</option>
           @if(isset($managers))
           @foreach ($managers as $manager)
-          <option value="{{ $manager->user->id }}" @if(old('manager_id') == $manager->user->id) selected @endif>
+          <option value="{{ $manager->id }}" @if(old('manager_id') == $manager->id) selected @endif>
             {{ $manager->user->name }} ({{ $manager->user->email }})
           </option>
           @endforeach
@@ -79,7 +82,19 @@
         <div class="text-danger small">{{ $message }}</div>
         @enderror
       </div>
-      
+
+      <div class="mb-3">
+        <label for="attachments" class="form-label">첨부파일</label>
+        <input type="file" name="attachments[]" id="attachments" class="form-control" multiple>
+        <div class="form-text">여러 파일을 선택할 수 있습니다. (최대 10개, 파일당 10MB 권장)</div>
+        @error('attachments')
+        <div class="text-danger small">{{ $message }}</div>
+        @enderror
+        @if($errors->has('attachments.*'))
+          <div class="text-danger small">{{ $errors->first('attachments.*') }}</div>
+        @endif
+      </div>
+
       <div class="mb-3">
         <label class="form-label">상태</label>
         <select name="status" class="form-select">

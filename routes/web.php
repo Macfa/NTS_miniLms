@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\ChapterController;
 use App\Http\Controllers\Main\MainController;
-use App\Http\Middleware\AdminAuthMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AdminController;
@@ -10,12 +9,17 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\ManagerController;
 use App\Http\Controllers\Admin\ProgramController;
 
+Route::prefix('/')->group(function () {
+  // 임시 
+  Route::match(['get', 'post'], '/', [AuthController::class, 'login'])->name('login');
+});
+
 Route::prefix('admin')->group(function () {
   Route::match(['get', 'post'], '/', [AuthController::class, 'login'])->name('admin.login');
   // Route::post('login', [AuthController::class, 'login'])->name('admin.login');
   Route::post('logout', [AuthController::class, 'logout'])->name('admin.logout');
   
-  Route::middleware([AdminAuthMiddleware::class, 'can:access-admin'])->group(function () {
+  Route::middleware(['auth', 'can:access-admin-page'])->group(function () {
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     // 학생 관리
     Route::get('/student/search', [StudentController::class, 'search'])->name('admin.student.search');

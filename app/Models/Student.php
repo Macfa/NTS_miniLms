@@ -13,14 +13,4 @@ class Student extends Model
   public function user() {
     return $this->belongsTo(User::class);
   }
-  protected static function booting()
-  {
-    parent::booting();
-
-    static::deleting(function ($student) {
-      if ($student->user) {
-        $student->user->delete();
-      }
-    });
-  }
 }

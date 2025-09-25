@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'status',
+        'role',
     ];
 
     /**
@@ -64,4 +65,19 @@ class User extends Authenticatable
     {
         return $this->attributes['status'] ? '활성화' : '비활성화';
     }
-  }
+    protected static function booted(): void
+    {
+        static::deleting(function (User $user) {
+            // 관리자/학생 레코드 소프트 삭제
+            if ($user->admin) {
+                $user->admin->delete();
+            }
+            if ($user->student) {
+                $user->student->delete();
+            }
+            if ($user->manager) {
+                $user->manager->delete();
+            }
+        });
+    }
+}

@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('attachable_id');
             $table->string('attachable_type');
+            $table->unsignedBigInteger('attachable_id');
             $table->string('type'); // video, pdf, txt, image...
             $table->string('path');
-            $table->json('meta')->nullable();
-            $table->timestamps();
+            $table->json('meta')->nullable(); // 기타 데이터
 
             $table->index(['attachable_type','attachable_id']);
             $table->index('type');

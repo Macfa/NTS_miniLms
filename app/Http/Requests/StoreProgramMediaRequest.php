@@ -4,15 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class storeStudentRequest extends FormRequest
+class StoreProgramMediaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-      // 관리자, 강사 학생 생성 가능
-      return true;
+        return true;
     }
 
     /**
@@ -23,10 +22,8 @@ class storeStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:20',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:2|confirmed',
-            'status' => 'required|in:0,1',
+            'attachments' => 'required',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,mp4,doc,docx,mov,avi|max:4096',
         ];
     }
 }
