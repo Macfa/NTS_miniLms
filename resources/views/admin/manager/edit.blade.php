@@ -50,6 +50,23 @@
                 @enderror
             </div>
             
+            <div class="mb-4">
+                <label for="attachments" class="block text-gray-700 text-sm font-bold mb-2">사업자등록증</label>
+                <input type="file" id="attachments" name="attachments" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <span class="text-gray-500 text-xs">파일 형식: PDF, 최대 크기: 5MB, ( This will be store safely )</span>
+                @error('attachments')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+              @if($manager->getFirstMediaUrl('attachments', 'preview'))
+                <div class="mb-4">
+                  <label class="block text-gray-700 text-sm font-bold mb-2">현재 업로드된 사업자등록증:</label>
+                  <a href="{{ $manager->getFirstMediaUrl('attachments') }}" target="_blank" class="text-blue-500 underline">사업자등록증 보기</a>
+                </div>
+              @endif              
+            </div>
+
             <!-- 상태 선택 필드 -->
             <div class="mb-6">
                 <label for="status" class="block text-gray-700 text-sm font-bold mb-2">상태</label>

@@ -6,6 +6,7 @@ use App\Models\Program;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -16,12 +17,15 @@ class StoredProgramMail extends Mailable
 {
     use Queueable, SerializesModels;
     public Program $program;
+
     /**
      * Create a new message instance.
      */
     public function __construct(Program $program)
     {
         $this->program = $program;
+        // 리스너를 큐에 넣으므로 주석
+        // $this->onQueue('emails');
     }
 
     /**
@@ -59,6 +63,11 @@ class StoredProgramMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+            $path = storage_path('app/public/media/program/25/images/hzn.me.jpeg');
+            if (is_file($path)) {
+                $image = Attachment::fromPath($path);
+                return [$image];
+            }
+            return [];
     }
 }

@@ -16,5 +16,5 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->withEvents(discover: [
-      __DIR__.'/../app/Events/Admin/Mail/*',
+      // 
     ])->create();

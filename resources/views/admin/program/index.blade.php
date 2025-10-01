@@ -20,6 +20,9 @@
       <button id="bulk-approval-btn" class="w-full md:w-auto bg-red-600 text-white font-bold py-2 px-6 rounded-md shadow-md hover:bg-red-700 transition-colors text-center">
         선택 승인
       </button>
+      <button id="bulk-rejection-btn" class="w-full md:w-auto bg-red-600 text-white font-bold py-2 px-6 rounded-md shadow-md hover:bg-red-700 transition-colors text-center">
+        선택 반려
+      </button>
     @endcan
 		<!-- 프로그램 검색 -->
 		<div class="w-full md:w-1/3 relative">
@@ -161,6 +164,68 @@
 			document.querySelectorAll('.row-check').forEach(cb => cb.checked = checked);
 		});
 		
+    document.getElementById('bulk-approval-btn').addEventListener('click', async function() {
+      const checked = Array.from(document.querySelectorAll('.row-check:checked')).map(cb => cb.value);
+      if (checked.length === 0) {
+        alert('승인할 프로그램을 선택하세요.');
+        return;
+      }
+      if (!confirm('정말 선택한 프로그램을 승인하시겠습니까?')) return;
+      
+      try {
+        const response = await fetch("{{ route('admin.program.approvalMany') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({ program_ids: checked, approval_status: 1 })
+        });
+        const result = await response.json();
+        if (result.status) {
+          console.error(result.message || '검색 실패');
+          return;
+        }
+        // 체크된 행 삭제
+        // document.querySelectorAll('.row-check:checked').forEach(cb => cb.closest('tr').remove());
+        location.reload();
+        
+      } catch (e) {
+        alert('네트워크 오류가 발생했습니다.');
+      }
+    });
+
+    document.getElementById('bulk-rejection-btn').addEventListener('click', async function() {
+      const checked = Array.from(document.querySelectorAll('.row-check:checked')).map(cb => cb.value);
+      if (checked.length === 0) {
+        alert('반려할 프로그램을 선택하세요.');
+        return;
+      }
+      if (!confirm('정말 선택한 프로그램을 반려하시겠습니까?')) return;
+      
+      try {
+        const response = await fetch("{{ route('admin.program.rejectionMany') }}", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({ program_ids: checked, approval_status: -1 })
+        });
+        const result = await response.json();
+        if (result.status) {
+          console.error(result.message || '검색 실패');
+          return;
+        }
+        // 체크된 행 삭제
+        // document.querySelectorAll('.row-check:checked').forEach(cb => cb.closest('tr').remove());
+        location.reload();
+        
+      } catch (e) {
+        alert('네트워크 오류가 발생했습니다.');
+      }
+    });
+
 		// 일괄 삭제 버튼 이벤트
 		document.getElementById('bulk-delete-btn').addEventListener('click', async function() {
 			const checked = Array.from(document.querySelectorAll('.row-check:checked')).map(cb => cb.value);

@@ -9,6 +9,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ProgramService
 {
@@ -21,7 +22,7 @@ class ProgramService
   }
   public function createProgramWithMedia(array $data, array $files, User $user)
   {
-    return DB::transaction(function () use ($data, $files, $user) {
+    $program = DB::transaction(function () use ($data, $files, $user) {
       if ($user->role === 'manager') {
         $managerId = $user->manager?->id;
         // if (!$managerId) {
@@ -52,11 +53,13 @@ class ProgramService
       ]);
       
       $this->mediaService->storeMedia($program, $files);
-      // attachments 배열에서 실제 파일 배열만 추출
 
-      StoreProgramEvent::dispatch($program);
       return $program;
     });
+    // Log::info('Program service created: ', ['program_id' => $program->id]);
+    // 트랜잭션 커밋 후 이벤트 디스패치
+    StoreProgramEvent::dispatch($program);
+    return $program;
   }
   public function updateProgram(int $id, array $data)
   {
@@ -116,6 +119,32 @@ class ProgramService
       $count = 0;
       foreach ($programs as $program) {
         $program->delete();
+        $count++;
+      }
+      return $count;
+    });
+  }
+  public function approvePrograms(array $ids, int $approval_status): int
+  {
+    return DB::transaction(function () use ($ids, $approval_status) {
+      $programs = $this->programModel->whereIn('id', $ids)->get();
+      $count = 0;
+      foreach ($programs as $program) {
+        $program->approval_status = $approval_status;
+        $program->save();
+        $count++;
+      }
+      return $count;
+    });
+  }
+  public function rejectPrograms(array $ids, int $approval_status): int
+  {
+    return DB::transaction(function () use ($ids, $approval_status) {
+      $programs = $this->programModel->whereIn('id', $ids)->get();
+      $count = 0;
+      foreach ($programs as $program) {
+        $program->approval_status = $approval_status;
+        $program->save();
         $count++;
       }
       return $count;

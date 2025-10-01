@@ -30,6 +30,8 @@ Route::prefix('admin')->group(function () {
       Route::get('/manager/search', [ManagerController::class, 'search'])->name('admin.manager.search');
       Route::resource('manager', ManagerController::class, ['as' => 'admin']); // 강사 관리 라우트
       Route::post('/manager/destroyMany', [ManagerController::class, 'destroyMany'])->name('admin.manager.destroyMany');
+      Route::post('/program/approvalMany', [ProgramController::class, 'approvalMany'])->name('admin.program.approvalMany');
+      Route::post('/program/rejectionMany', [ProgramController::class, 'rejectionMany'])->name('admin.program.rejectionMany');
     });
     Route::get('/program/search', [ProgramController::class, 'search'])->name('admin.program.search');
     Route::resource('program', ProgramController::class, ['as' => 'admin']); // 프로그램 관리 라우트

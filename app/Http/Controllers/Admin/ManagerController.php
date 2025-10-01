@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storeManagerRequest;
 use App\Http\Requests\UpdateManagerRequest;
 use App\Services\Admin\ManagerService;
+use App\Services\Admin\MediaService;
 use Illuminate\Http\Request;
 use App\Models\User; // User 모델 추가
 use App\Models\Manager; // Manager 모델 추가
@@ -13,10 +14,12 @@ use App\Models\Manager; // Manager 모델 추가
 class ManagerController extends Controller
 {
   protected ManagerService $managerService;
-  
-  public function __construct(ManagerService $managerService) 
+  protected MediaService $mediaService;
+
+  public function __construct(ManagerService $managerService, MediaService $mediaService) 
   {
     $this->managerService = $managerService;
+    $this->mediaService = $mediaService;
   }
   public function index() 
   {
@@ -32,8 +35,11 @@ class ManagerController extends Controller
   {
     try {
       $validated = $request->validated();
-      $this->managerService->createManager($validated);
-      
+      $files = $request->file('attachments', []);
+      unset($validated['attachments']);
+      // 만약 전역 에러 핸들링을 쓴다면 서비스를 분리하는게 좋아보임
+      $this->managerService->createManagerWithMedia($validated, $files);
+
       return redirect()->route('admin.manager.index')->with(['status' => 0, 'message' => '학생이 성공적으로 생성되었습니다.']);
     } catch (\Exception $e) {
       \Log::error('학생 생성 실패: ' . $e->getMessage());

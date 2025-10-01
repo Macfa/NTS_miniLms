@@ -12,11 +12,13 @@ class ManagerService
 {
   protected User $user;
   protected Manager $manager;
+  protected MediaService $mediaService;
   
-  public function __construct(User $user, Manager $manager)
+  public function __construct(User $user, Manager $manager, MediaService $mediaService)
   {
     $this->user = $user;
     $this->manager = $manager;
+    $this->mediaService = $mediaService;
   }
   /**
   * 강사 검색 (이름/이메일)
@@ -56,9 +58,9 @@ class ManagerService
   * @param array $data
   * @return \App\Models\User
   */
-  public function createManager(array $data): User
+  public function createManagerWithMedia(array $data, array $files): User
   {
-    return DB::transaction(function () use ($data) {
+    return DB::transaction(function () use ($data, $files) {
       $user = $this->user->create([
         'name' => $data['name'],
         'email' => $data['email'],
@@ -71,6 +73,7 @@ class ManagerService
         'user_id' => $user->id,
       ]);
       
+      $this->mediaService->storePrivateMedia($user->manager, $files);
       return $user;
     });
   }
@@ -82,9 +85,9 @@ class ManagerService
   * @param array $data 수정할 데이터
   * @return Manager 수정된 Manager 모델 인스턴스
   */
-  public function updateManager(int $id, array $data): Manager
+  public function updateManagerWithMedia(int $id, array $data, array $files): Manager
   {
-    return DB::transaction(function () use ($id, $data) {
+    return DB::transaction(function () use ($id, $data, $files) {
       $manager = $this->manager->with('user')->where('user_id', $id)->firstOrFail();
       $user = $manager->user;
       

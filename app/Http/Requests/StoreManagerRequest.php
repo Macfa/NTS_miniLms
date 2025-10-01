@@ -11,13 +11,13 @@ class storeManagerRequest extends FormRequest
      */
     public function authorize(): bool
     {
-      // dd(auth()->user()->admin);
       // 관리자만 학생 생성 가능
-        if(auth()->user()->admin?->exists()) {
-          return true;
-        } else {
-          return false;
-        }
+        // if(auth()->user()->admin?->exists()) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+        return true;
     }
 
     /**
@@ -32,6 +32,8 @@ class storeManagerRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:2|confirmed',
             'status' => 'required|in:0,1',
+            'attachments' => 'nullable', // test : nullable
+            'attachments.*' => 'file|mimes:pdf',
         ];
     }
 }

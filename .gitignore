@@ -24,3 +24,6 @@ Homestead.yaml
 Thumbs.db
 feature.md
 workflow.md
+/storage/app
+/storage/logs
+/storage/media-library

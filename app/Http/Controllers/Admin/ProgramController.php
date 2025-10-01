@@ -137,4 +137,28 @@ class ProgramController extends Controller
       return response()->json(['status' => 1, 'message' => '프로그램 여러개 삭제 중 오류가 발생했습니다.']);
     }
   }
+  public function approvalMany(Request $request)
+  {
+    try {
+      $ids = $request->input('program_ids', []);
+      $approval_status = $request->input('approval_status', 1);
+      $updatedCount = $this->programService->approvePrograms($ids, $approval_status);
+      return response()->json(['status' => 0, 'message' => "프로그램 $updatedCount 개의 승인 상태가 성공적으로 변경되었습니다."]);
+    } catch (Exception $e) {
+      Log::error('프로그램 여러개 승인 상태 변경 실패: ' . $e->getMessage());
+      return response()->json(['status' => 1, 'message' => '프로그램 여러개 승인 상태 변경 중 오류가 발생했습니다.']);
+    }
+  }
+  public function rejectionMany(Request $request)
+  {
+    try {
+      $ids = $request->input('program_ids', []);
+      $approval_status = $request->input('approval_status', -1);
+      $updatedCount = $this->programService->rejectPrograms($ids, $approval_status);
+      return response()->json(['status' => 0, 'message' => "프로그램 $updatedCount 개의 승인 상태가 성공적으로 변경되었습니다."]);
+    } catch (Exception $e) {
+      Log::error('프로그램 여러개 승인 상태 변경 실패: ' . $e->getMessage());
+      return response()->json(['status' => 1, 'message' => '프로그램 여러개 승인 상태 변경 중 오류가 발생했습니다.']);
+    }
+  }
 }

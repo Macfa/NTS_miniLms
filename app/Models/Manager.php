@@ -6,10 +6,12 @@ use Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Manager extends Model
+class Manager extends Model implements HasMedia
 {
-  use HasFactory, SoftDeletes;
+  use HasFactory, SoftDeletes, InteractsWithMedia;
     protected $fillable = ['user_id'];
     
     public function user() {
@@ -23,4 +25,12 @@ class Manager extends Model
   {
     return $this->hasMany(Program::class, 'manager_id', 'id');
   }
+    public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+      $this->addMediaConversion('preview')
+        ->width(1200)
+        ->height(900)
+        ->sharpen(5)
+        ->performOnCollections('images');
+    }  
 }
