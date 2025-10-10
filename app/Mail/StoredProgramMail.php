@@ -35,9 +35,9 @@ class StoredProgramMail extends Mailable
     {
       return new Envelope(
           from: new Address('service@yourdomain.com', '관리자'),
-          replyTo: [
-              new Address('kombo67688@gmail.com', '관리자'),
-          ],
+          // replyTo: [
+          //     new Address('test@gmail.com', '관리자'),
+          // ],
           subject: '프로그램 등록 승인요청',
       );
     }
@@ -63,11 +63,11 @@ class StoredProgramMail extends Mailable
      */
     public function attachments(): array
     {
-            $path = storage_path('app/public/media/program/25/images/hzn.me.jpeg');
-            if (is_file($path)) {
-                $image = Attachment::fromPath($path);
-                return [$image];
-            }
+            // $path = storage_path('app/public/media/program/25/images/hzn.me.jpeg');
+            // if (is_file($path)) {
+            //     $image = Attachment::fromPath($path);
+            //     return [$image];
+            // }
             return [];
     }
 }

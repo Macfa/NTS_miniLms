@@ -22,6 +22,7 @@ class ProgramService
   }
   public function createProgramWithMedia(array $data, array $files, User $user)
   {
+    // 디비 작업 트랜잭션 처리, 미디어처리 -> 이벤트 발생
     $program = DB::transaction(function () use ($data, $files, $user) {
       if ($user->role === 'manager') {
         $managerId = $user->manager?->id;
@@ -61,7 +62,7 @@ class ProgramService
     StoreProgramEvent::dispatch($program);
     return $program;
   }
-  public function updateProgram(int $id, array $data)
+   public function updateProgram(int $id, array $data)
   {
     return DB::transaction(function () use ($id, $data) {
       $program = $this->programModel->findOrFail($id);
