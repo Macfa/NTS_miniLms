@@ -7,6 +7,8 @@ use App\Services\Admin\ChapterService;
 use App\Services\Admin\ProgramService;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Chapter;
+use Illuminate\Support\Facades\Log;
 
 class ChapterController extends Controller
 {
@@ -20,7 +22,7 @@ class ChapterController extends Controller
   }
   public function index() 
   {
-    $this->authorize('viewAny', \App\Models\Chapter::class);
+    $this->authorize('viewAny', Chapter::class);
     $chapters = $this->chapterService->getChapters();
     $user = auth()->user();
     if ($user && $user->role === 'manager') {
@@ -33,7 +35,7 @@ class ChapterController extends Controller
   }
   public function create()
   {
-    $this->authorize('create', \App\Models\Chapter::class);
+    $this->authorize('create', Chapter::class);
     $programs = $this->programService->getPrograms();
     $user = auth()->user();
     if ($user && $user->role === 'manager') {
@@ -44,7 +46,7 @@ class ChapterController extends Controller
   public function store(StoreChapterRequest $request)
   {
     try {
-      $this->authorize('create', \App\Models\Chapter::class);
+      $this->authorize('create', Chapter::class);
       $validated = $request->validated();
       $this->chapterService->createChapter($validated);
 
@@ -75,7 +77,7 @@ class ChapterController extends Controller
 
       return redirect()->route('admin.chapter.index')->with(['status' => 0, 'message' => '챕터가 성공적으로 수정되었습니다.']);
     } catch (\Exception $e) {
-      \Log::error('챕터 수정 실패: ' . $e->getMessage());
+      Log::error('챕터 수정 실패: ' . $e->getMessage());
       return back()->withErrors(['status' => 1, 'message' => '챕터 수정 중 오류가 발생했습니다.'])->withInput();
     }
   }
@@ -87,7 +89,7 @@ class ChapterController extends Controller
       return response()->json(['status' => 0, 'data' => $chapters]);
 
     } catch (\Exception $e) {
-      \Log::error('챕터 검색 실패: ' . $e->getMessage());
+      Log::error('챕터 검색 실패: ' . $e->getMessage());
       return response()->json(['status' => 1, 'message' => '챕터 검색 중 오류가 발생했습니다.'], 500);
     }
   }
@@ -97,7 +99,7 @@ class ChapterController extends Controller
       $chapterIds = $request->input('chapter_ids', []);
       $user = auth()->user();
       if ($user && $user->role === 'manager') {
-        $chapters = \App\Models\Chapter::whereIn('id', $chapterIds)->with('program.manager')->get();
+        $chapters = Chapter::whereIn('id', $chapterIds)->with('program.manager')->get();
         foreach ($chapters as $ch) {
           $this->authorize('delete', $ch);
         }
@@ -105,7 +107,7 @@ class ChapterController extends Controller
       $deletedCount = $this->chapterService->deleteChapters($chapterIds);
       return response()->json(['status' => 0, 'message' => "$deletedCount 개의 챕터가 성공적으로 삭제되었습니다."]);
     } catch (\Exception $e) {
-      \Log::error('챕터 일괄 삭제 실패: ' . $e->getMessage());
+      Log::error('챕터 일괄 삭제 실패: ' . $e->getMessage());
       return response()->json(['status' => 1, 'message' => '챕터 일괄 삭제 중 오류가 발생했습니다.']);
     }
   }

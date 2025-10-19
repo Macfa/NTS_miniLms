@@ -17,8 +17,9 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        Program::class => ProgramPolicy::class,
-        Chapter::class => ChapterPolicy::class,
+        // 버전 12 에서는 정책 연결 자동적 처리
+        // Program::clads => ProgramPolicy::class,
+        // Chapter::class => ChapterPolicy::class,
     ];
 
     /**
@@ -26,8 +27,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-      $this->registerPolicies();
-
       // 관리자 전권(모든 Policy 메소드 패스)
       Gate::before(function ($user) {
           return $user->role === 'admin' ? true : null;
@@ -35,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
 
       // 기존 Blade / route 에서 사용하는 Gate 이름 유지
       Gate::define('is-admin', fn($user) => $user->role === 'admin');
+
       // 관리자 + 강사 공용 admin 섹션 접근 허용
       Gate::define('access-admin-page', fn($user) => in_array($user->role, ['admin','manager']));
     }

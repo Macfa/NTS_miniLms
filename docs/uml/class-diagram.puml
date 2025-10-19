@@ -1,0 +1,169 @@
+@startuml
+' miniLms Class Diagram (PlantUML)
+' View tip: VS Code PlantUML extension (jebbs.plantuml) → "PlantUML: Preview Current Diagram"
+
+skinparam dpi 150
+skinparam classAttributeIconSize 0
+skinparam ArrowColor Gray
+skinparam classFontSize 14
+skinparam wrapWidth 220
+skinparam defaultTextAlignment left
+
+top to bottom direction
+
+title miniLms Class Diagram
+
+package "Models" {
+  class User {
+    +id: int
+    +name: string
+    +email: string
+    +password: string
+    +status: int
+    +role: string
+    +admin(): Admin
+    +student(): Student
+    +manager(): Manager
+  }
+
+  class Admin {
+    +id: int
+    +user_id: int
+    +role: string
+    +user(): User
+  }
+
+  class Student {
+    +id: int
+    +user_id: int
+    +user(): User
+  }
+
+  class Manager {
+    +id: int
+    +user_id: int
+    +programs(): Program[]
+    +user(): User
+  }
+
+  class Program {
+    +id: int
+    +manager_id: int
+    +category: string
+    +name: string
+    +description: text
+    +total_week: int
+    +limit_count: int
+    +total_price: int
+    +status: int
+    +approval_status: int
+    +chapters(): Chapter[]
+    +manager(): Manager
+    +user(): User  ' hasOneThrough via Manager
+  }
+
+  class Chapter {
+    +id: int
+    +program_id: int
+    +start: datetime
+    +end: datetime
+    +week_days: string
+    +status: int
+    +program(): Program
+  }
+
+  class Attachment <<polymorphic>> {
+    +id: int
+    +attachable_type: string
+    +attachable_id: int
+    +type: string
+    +path: string
+    +meta: json
+    +attachable(): (morphTo)
+  }
+
+  class Media <<polymorphic, Spatie>> {
+    +id: int
+    +model_type: string
+    +model_id: int
+    +collection_name: string
+    +mime_type: string
+    +isImage(): bool
+    +isVideo(): bool
+  }
+}
+
+package "Controllers" {
+  class AdminController
+  class ProgramController
+  class ChapterController
+  class StudentController
+  class AuthController
+}
+
+package "Services" {
+  class ProgramService
+  class ChapterService
+  class StudentService
+  class ManagerService
+  class MediaService
+  class MailService
+}
+
+package "Policies" {
+  class ProgramPolicy
+  class ChapterPolicy
+}
+
+package "Events & Listeners" {
+  class StoreProgramEvent
+  class SendEmailListener
+}
+
+' === Relations (Models)
+User "1" -- "0..1" Admin : hasOne
+User "1" -- "0..1" Student : hasOne
+User "1" -- "0..1" Manager : hasOne
+
+Manager "1" --> "*" Program : hasMany
+Program "*" --> "1" Manager : belongsTo
+
+Program "1" --> "*" Chapter : hasMany
+Chapter "*" --> "1" Program : belongsTo
+
+Program ..> User : hasOneThrough (via Manager)
+
+' Polymorphic relations
+Attachment ..> Program : morphTo
+Attachment ..> Chapter : morphTo
+Attachment ..> Manager : morphTo
+
+Media ..> Program : morphTo (media)
+Media ..> Manager : morphTo (media)
+
+' === Controllers use Services
+ProgramController ..> ProgramService : uses
+ProgramController ..> MediaService : uses
+ChapterController ..> ChapterService : uses
+StudentController ..> StudentService : uses
+AdminController ..> ManagerService : uses
+AuthController ..> ManagerService : uses
+
+' === Services work with Models
+ProgramService ..> Program : manages
+ProgramService ..> Chapter : manages
+ChapterService ..> Chapter : manages
+StudentService ..> Student : manages
+ManagerService ..> Manager : manages
+MediaService ..> Media : manages
+
+' === Policies authorize access
+ProgramPolicy ..> Program : authorizes
+ChapterPolicy ..> Chapter : authorizes
+
+' === Events / Listeners
+StoreProgramEvent --> Program : payload
+SendEmailListener ..> StoreProgramEvent : handles
+SendEmailListener ..> MailService : uses
+
+@enduml

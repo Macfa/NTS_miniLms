@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
 {
+  // 미사용
     protected $fillable = [
         'type',
         'path',

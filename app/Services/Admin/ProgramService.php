@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Events\Admin\Mail\StoreProgramEvent;
+use App\Domains\ProgramAggregate;
 use App\Models\User;
 use App\Models\Program;
 use Illuminate\Database\QueryException;
@@ -15,52 +16,17 @@ class ProgramService
 {
   protected Program $programModel;
   protected MediaService $mediaService;
+  protected ProgramAggregate $programAggregate;
 
-  public function __construct(Program $programModel, MediaService $mediaService) {
+  public function __construct(Program $programModel, MediaService $mediaService, ProgramAggregate $programAggregate) {
     $this->programModel = $programModel;
     $this->mediaService = $mediaService;
+    $this->programAggregate = $programAggregate;
   }
   public function createProgramWithMedia(array $data, array $files, User $user)
   {
-    // 디비 작업 트랜잭션 처리, 미디어처리 -> 이벤트 발생
-    $program = DB::transaction(function () use ($data, $files, $user) {
-      if ($user->role === 'manager') {
-        $managerId = $user->manager?->id;
-        // if (!$managerId) {
-        //  예외 규칙이 필요
-        //   throw new ManagerNotFoundFromUserException('유저 계정에 매니저 정보가 없습니다.');
-        // }
-        $data['manager_id'] = $managerId;
-      }
-
-      if ($user->role === 'admin') {
-        // 관리자면 전달값을 우선 사용, 없으면 기본값 1
-        $data['approval_status'] = isset($data['approval_status']) ? (int) $data['approval_status'] : 1;
-      } else {
-        // 강사는 기본 대기값(테이블 기본값 0) 유지
-        $data['approval_status'] = 0;
-      }
-
-      $program = $this->programModel->create([
-        'category' => $data['category'],
-        'name' => $data['name'],
-        'description' => $data['description'],
-        'manager_id' => $data['manager_id'],
-        'total_week' => $data['total_week'],
-        'limit_count' => $data['limit_count'],
-        'total_price' => $data['total_price'],
-        'approval_status' => $data['approval_status'],
-        'status' => $data['status'],
-      ]);
-      
-      $this->mediaService->storeMedia($program, $files);
-
-      return $program;
-    });
-    // Log::info('Program service created: ', ['program_id' => $program->id]);
-    // 트랜잭션 커밋 후 이벤트 디스패치
-    StoreProgramEvent::dispatch($program);
-    return $program;
+    // 도메인 Aggregate에 위임 (트랜잭션/이벤트 포함)
+    return $this->programAggregate->createProgramWithMedia($data, $files, $user);
   }
    public function updateProgram(int $id, array $data)
   {

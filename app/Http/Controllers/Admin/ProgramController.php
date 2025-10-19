@@ -7,7 +7,6 @@ use App\Events\Admin\Mail\StoreProgramEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProgramMediaRequest;
 use App\Http\Requests\StoreProgramRequest;
-// use App\Http\Requests\UpdateProgramRequest;
 use App\Http\Requests\UpdateProgramRequest;
 use App\Services\Admin\ManagerService;
 use App\Services\Admin\MediaService;
@@ -15,6 +14,7 @@ use App\Services\Admin\ProgramService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\Program;
 use Exception;
 
 class ProgramController extends Controller
@@ -34,7 +34,7 @@ class ProgramController extends Controller
   public function index() 
   {
     // 목록 권한 (관리자/강사만)
-    $this->authorize('viewAny', \App\Models\Program::class);
+    $this->authorize('viewAny', Program::class);
     $programs = $this->programService->getPrograms();
     $user = auth()->user();
     if ($user && $user->role === 'manager') {
@@ -47,20 +47,19 @@ class ProgramController extends Controller
   public function create() 
   {
     $managers = $this->managerService->getManagersWithUser();
+    
     return view('admin.program.create', compact('managers'));
   }
 
   public function store(StoreProgramRequest $request) 
   {
     try {
-      $this->authorize('create', \App\Models\Program::class);
+      $this->authorize('create', Program::class);
       $validated = $request->validated();
       $files = $request->file('attachments', []);
       unset($validated['attachments']);
       $user = auth()->user();
       $program = $this->programService->createProgramWithMedia($validated, $files, $user);
-
-      // $this->mediaService->storeMedia($program, $mediaValidate);
 
       return redirect()->route('admin.program.index')->with(['status' => 0, 'message' => '프로그램이 성공적으로 생성되었습니다.']);
 
@@ -75,6 +74,7 @@ class ProgramController extends Controller
     $program = $this->programService->getProgram($id);    
     $this->authorize('view', $program);
     $managers = $this->managerService->getManagersWithUser();
+
     return view('admin.program.edit', compact('program', 'managers'));
   }
   
@@ -84,7 +84,9 @@ class ProgramController extends Controller
       $validated = $request->validated();
       $program = $this->programService->updateProgram($id, $validated);
       $this->authorize('update', $program);
+
       return redirect()->route('admin.program.index', $id)->with(['status' => 0, 'message' => '프로그램 정보가 성공적으로 수정되었습니다.']);
+
     } catch (Exception $e) {
       Log::error('프로그램 수정 실패: ' . $e->getMessage());
       return back()->withErrors(['status' => 1, 'message' => $e->getMessage()])->withInput();
