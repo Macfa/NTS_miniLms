@@ -2,17 +2,17 @@
 
 namespace App\Services\Admin;
 
-use App\Models\Program;
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Spatie\Image\Image;
 
 class MediaService
 {
-  protected Program $programModel;
+  protected Course $courseModel;
 
-  public function __construct(Program $programModel) {
-    $this->programModel = $programModel;
+  public function __construct(Course $courseModel) {
+    $this->courseModel = $courseModel;
   }
   public function storeMedia(Model $model, array $files)
   {

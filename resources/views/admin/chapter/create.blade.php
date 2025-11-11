@@ -12,23 +12,23 @@
   <h1 class="text-4xl font-bold mb-8 text-gray-800">챕터 생성</h1>
   
   <div class="bg-white rounded-lg shadow-md p-6">
-  <form action="{{ route('admin.chapter.store') }}" method="POST" id="chapterForm">
+  <form action="{{ route('admin.curriculum.store') }}" method="POST" id="curriculumForm">
       @csrf
       
 
       <div class="mb-3">
         <label class="form-label">프로그램</label>
-        <select name="program_id" class="form-select" required>
+        <select name="Course_id" class="form-select" required>
           <option value="" disabled selected>프로그램을 선택하세요</option>
-          @if(isset($programs))
-          @foreach ($programs as $program)
-          <option value="{{ $program->id }}" @if(old('program_id') == $program->id) selected @endif>
-            {{ $program->name }}
+          @if(isset($Courses))
+          @foreach ($Courses as $Course)
+          <option value="{{ $Course->id }}" @if(old('Course_id') == $Course->id) selected @endif>
+            {{ $Course->name }}
           </option>
           @endforeach
           @endif
         </select>
-        @error('program_id')
+        @error('Course_id')
         <div class="text-danger small">{{ $message }}</div>
         @enderror
       </div>
@@ -74,7 +74,7 @@
   <!-- 승인 상태는 챕터에는 필요 없음 -->
       <div class="d-flex justify-content-end mt-4">
   <button type="submit" class="btn btn-primary mr-4">챕터 생성</button>
-  <a href="{{ route('admin.chapter.index') }}" class="btn btn-secondary">취소</a>
+  <a href="{{ route('admin.curriculum.index') }}" class="btn btn-secondary">취소</a>
       </div>
     </form>
   </div>

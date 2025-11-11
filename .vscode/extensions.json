@@ -5,6 +5,8 @@
     "onecentlin.laravel5-snippets",
     "devsense.phptools-vscode",
     "zobo.php-intellisense",
-    "xdebug.php-pack"
+    "xdebug.php-pack",
+    "gera2ld.markmap-vscode",
+    "hediet.vscode-drawio"
   ]
 }

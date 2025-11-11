@@ -32,11 +32,11 @@ classDiagram
     class Manager {
       +id: int
       +user_id: int
-      +programs(): Program[]
+      +Courses(): Course[]
       +user(): User
     }
 
-    class Program {
+    class Course {
       +id: int
       +manager_id: int
       +category: string
@@ -47,19 +47,19 @@ classDiagram
       +total_price: int
       +status: int
       +approval_status: int
-      +chapters(): Chapter[]
+      +curriculums(): Curriculum[]
       +manager(): Manager
       +user(): User // hasOneThrough via Manager
     }
 
-    class Chapter {
+    class Curriculum {
       +id: int
-      +program_id: int
+      +Course_id: int
       +start: datetime
       +end: datetime
       +week_days: string
       +status: int
-      +program(): Program
+      +Course(): Course
     }
 
     %% Relationships
@@ -71,14 +71,14 @@ classDiagram
     User "1" o-- "0..1" Student : hasOne
     User "1" o-- "0..1" Manager : hasOne
 
-    Manager "1" --> "*" Program : hasMany
-    Program "*" --> "1" Manager : belongsTo
+    Manager "1" --> "*" Course : hasMany
+    Course "*" --> "1" Manager : belongsTo
 
-    Program "1" --> "*" Chapter : hasMany
-    Chapter "*" --> "1" Program : belongsTo
+    Course "1" --> "*" Curriculum : hasMany
+    Curriculum "*" --> "1" Course : belongsTo
 
-    %% Through relation (Program -> User via Manager)
-    Program ..> User : hasOneThrough (via Manager)
+    %% Through relation (Course -> User via Manager)
+    Course ..> User : hasOneThrough (via Manager)
 
     %% Polymorphic attachments (custom Attachment model)
     class Attachment {
@@ -91,8 +91,8 @@ classDiagram
       +attachable(): (morphTo)
     }
     %% Attachable targets (examples)
-    Attachment ..> Program : morphTo
-    Attachment ..> Chapter : morphTo
+    Attachment ..> Course : morphTo
+    Attachment ..> Curriculum : morphTo
     Attachment ..> Manager : morphTo
 
     %% Spatie MediaLibrary integration
@@ -105,53 +105,53 @@ classDiagram
       +isImage(): bool
       +isVideo(): bool
     }
-    Media ..> Program : morphTo (media)
+    Media ..> Course : morphTo (media)
     Media ..> Manager : morphTo (media)
 
   %% === Application Layer (Controllers) ===
   class AdminController
-  class ProgramController
-  class ChapterController
-  class StudentController
-  class AuthController
+  class AdminCourseController
+  class AdminCurriculumController
+  class AdminStudentController
+  class AdminAuthController
 
   %% === Domain Services ===
-  class ProgramService
-  class ChapterService
+  class CourseService
+  class CurriculumService
   class StudentService
   class ManagerService
   class MediaService
   class MailService
 
   %% === Policies ===
-  class ProgramPolicy
-  class ChapterPolicy
+  class CoursePolicy
+  class CurriculumPolicy
 
   %% === Events / Listeners ===
-  class StoreProgramEvent
+  class StoreCourseEvent
   class SendEmailListener
 
   %% Controllers use Services
-  ProgramController ..> ProgramService : uses
-  ProgramController ..> MediaService : uses
-  ChapterController ..> ChapterService : uses
-  StudentController ..> StudentService : uses
+  AdminCourseController ..> CourseService : uses
+  AdminCourseController ..> MediaService : uses
+  AdminCurriculumController ..> CurriculumService : uses
+  AdminStudentController ..> StudentService : uses
   AdminController ..> ManagerService : uses
-  AuthController ..> ManagerService : uses
+  AdminAuthController ..> ManagerService : uses
 
   %% Services operate on Models
-  ProgramService ..> Program : manages
-  ProgramService ..> Chapter : manages
-  ChapterService ..> Chapter : manages
+  CourseService ..> Course : manages
+  CourseService ..> Curriculum : manages
+  CurriculumService ..> Curriculum : manages
   StudentService ..> Student : manages
   ManagerService ..> Manager : manages
   MediaService ..> Media : manages
 
   %% Policies guard access
-  ProgramPolicy ..> Program : authorizes
-  ChapterPolicy ..> Chapter : authorizes
+  CoursePolicy ..> Course : authorizes
+  CurriculumPolicy ..> Curriculum : authorizes
 
   %% Events / Listeners
-  StoreProgramEvent --> Program : payload
-  SendEmailListener ..> StoreProgramEvent : handles
+  StoreCourseEvent --> Course : payload
+  SendEmailListener ..> StoreCourseEvent : handles
   SendEmailListener ..> MailService : uses

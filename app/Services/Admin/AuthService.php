@@ -3,8 +3,9 @@
 namespace App\Services\Admin;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
-class AuthService
+class AuthService // 사용하지 않음 
 {
     /**
      * 사용자를 인증하고 로그인 처리를 수행합니다.
@@ -12,13 +13,9 @@ class AuthService
      * @param array $credentials
      * @return bool
      */
-    public function processLogin(array $credentials): bool
+    public function processLogin(Request $request): bool
     {
-        // 사용자 인증 로직을 서비스에서 처리
-        if (Auth::attempt($credentials, true)) {
-            // 인증 성공
-            return true;
-        }
+
 
         // 인증 실패
         return false;

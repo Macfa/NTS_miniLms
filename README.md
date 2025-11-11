@@ -1,14 +1,19 @@
 MiniLMS
 
+* Account
+  - admin@admin.com # Admin
+  - manager@manager.com # Manager
+  - student@student.com # Student
+
 * **Architecture**
-  * Controller = HTTP 처리
-  * Service = 비즈니스 로직
-  * Event/Listener = DDD 처리 
+  * Controller: HTTP 처리
+  * Service: 비즈니스 로직
+  * Event/Listener: 비동기 처리
 
 * **Event/Listenr**
   * Mail ( mailtrap )
 
 * **Database**
-  * Eloquent ORM: Accessor(접근자), Mutator(변경자)로 프로퍼티 값을 읽고(set/get) 변환
-  Class Event 을 이용하여 매니저 - 유저 등 연관 관계에 softDelete 설정
+  * Accessor(접근자), Mutator(변경자),cast 처리
+  * Class Event 이용
   

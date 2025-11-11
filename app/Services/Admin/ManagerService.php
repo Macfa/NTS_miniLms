@@ -123,7 +123,7 @@ class ManagerService
       $manager->delete();
       $user->delete();
       
-      // need to adding relation models ( programs, chapters ... )
+      // need to adding relation models ( Courses, curriculums ... )
       return true;
     });
   }

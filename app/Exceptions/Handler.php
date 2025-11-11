@@ -4,6 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Exception;
+use DomainException;
+use RuntimeException;
 
 class Handler extends ExceptionHandler
 {
@@ -18,13 +21,18 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+        $this->renderable(function (Throwable $e, $request) {
+            if($request->expectsJson()){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+
+            }
+        });
     }
     public function render($request, Throwable $exception)
     {
-      // 미정
-        // if ($exception instanceof \Illuminate\Validation\ValidationException) {
-        //     return response()->view('errors.validation', ['errors' => $exception->errors()], 422);
-        // }
-        // return parent::render($request, $exception);
+        return parent::render($request, $exception);
     }
 }

@@ -36,11 +36,11 @@ classDiagram
     class Manager {
       +id: int
       +user_id: int
-      +programs(): Program[]
+      +Courses(): Course[]
       +user(): User
     }
 
-    class Program {
+    class Course {
       +id: int
       +manager_id: int
       +category: string
@@ -51,19 +51,19 @@ classDiagram
       +total_price: int
       +status: int
       +approval_status: int
-      +chapters(): Chapter[]
+      +curriculums(): Curriculum[]
       +manager(): Manager
       +user(): User // hasOneThrough via Manager
     }
 
-    class Chapter {
+    class Curriculum {
       +id: int
-      +program_id: int
+      +Course_id: int
       +start: datetime
       +end: datetime
       +week_days: string
       +status: int
-      +program(): Program
+      +Course(): Course
     }
 
     %% Relationships
@@ -75,14 +75,14 @@ classDiagram
     User "1" o-- "0..1" Student : hasOne
     User "1" o-- "0..1" Manager : hasOne
 
-    Manager "1" --> "*" Program : hasMany
-    Program "*" --> "1" Manager : belongsTo
+    Manager "1" --> "*" Course : hasMany
+    Course "*" --> "1" Manager : belongsTo
 
-    Program "1" --> "*" Chapter : hasMany
-    Chapter "*" --> "1" Program : belongsTo
+    Course "1" --> "*" Curriculum : hasMany
+    Curriculum "*" --> "1" Course : belongsTo
 
-    %% Through relation (Program -> User via Manager)
-    Program ..> User : hasOneThrough (via Manager)
+    %% Through relation (Course -> User via Manager)
+    Course ..> User : hasOneThrough (via Manager)
 
     %% Polymorphic attachments (custom Attachment model)
     class Attachment {
@@ -94,8 +94,8 @@ classDiagram
       +meta: json
       +attachable(): (morphTo)
     }
-    Attachment ..> Program : morphTo
-    Attachment ..> Chapter : morphTo
+    Attachment ..> Course : morphTo
+    Attachment ..> Curriculum : morphTo
     Attachment ..> Manager : morphTo
 
     %% Spatie MediaLibrary integration
@@ -108,6 +108,6 @@ classDiagram
       +isImage(): bool
       +isVideo(): bool
     }
-    Media ..> Program : morphTo (media)
+    Media ..> Course : morphTo (media)
     Media ..> Manager : morphTo (media)
 ```

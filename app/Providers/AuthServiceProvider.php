@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
-use App\Models\Program;
-use App\Models\Chapter;
-use App\Policies\ProgramPolicy;
-use App\Policies\ChapterPolicy;
+use App\Models\Course;
+use App\Models\Curriculum;
+use App\Policies\CoursePolicy;
+use App\Policies\CurriculumPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,8 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 버전 12 에서는 정책 연결 자동적 처리
-        // Program::clads => ProgramPolicy::class,
-        // Chapter::class => ChapterPolicy::class,
+        // Course::clads => CoursePolicy::class,
+        // Curriculum::class => CurriculumPolicy::class,
     ];
 
     /**

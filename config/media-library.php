@@ -94,8 +94,8 @@ return [
      * Here you can specify which path generator should be used for the given class.
      */
     'custom_path_generators' => [
-        // Program 모델에 대해 커스텀 경로 사용
-        App\Models\Program::class => App\MediaLibrary\PathGenerator\ProgramPathGenerator::class,
+        // Course 모델에 대해 커스텀 경로 사용
+        App\Models\Course::class => App\MediaLibrary\PathGenerator\CoursePathGenerator::class,
     ],
 
     /*

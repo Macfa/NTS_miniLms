@@ -21,9 +21,9 @@ class Manager extends Model implements HasMedia
   {
       return $this->user->status ? '활성화' : '비활성화';
   }
-  public function programs()
+  public function Courses()
   {
-    return $this->hasMany(Program::class, 'manager_id', 'id');
+    return $this->hasMany(Course::class, 'manager_id', 'id');
   }
     public function registerMediaConversions(\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {

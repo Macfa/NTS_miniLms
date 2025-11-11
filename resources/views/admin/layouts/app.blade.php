@@ -26,8 +26,8 @@
                   @can('is-admin')
                   <a href="{{ route('admin.manager.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">강사 관리</a>
                   @endcan
-                  <a href="{{ route('admin.program.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">프로그램 관리</a>
-                  <a href="{{ route('admin.chapter.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">챕터 관리</a>
+                  <a href="{{ route('admin.Course.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">프로그램 관리</a>
+                  <a href="{{ route('admin.curriculum.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">챕터 관리</a>
                   {{-- <a href="{{ route('admin.payment.index') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">결제 관리</a> --}}
 
                     <!-- 로그아웃 버튼 -->

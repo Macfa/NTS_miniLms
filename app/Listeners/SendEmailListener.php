@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\Admin\Mail\StoreProgramEvent;
+use App\Events\Admin\Mail\StoreCourseEvent;
 use App\Services\MailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -24,14 +24,14 @@ class SendEmailListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(StoreProgramEvent $event): void
+    public function handle(StoreCourseEvent $event): void
     {
-      // Log::info('SendEmailListener triggered for Program ID: ', ['program_id' => $event->program->id]);
-      $this->mailService->send($event->program);
+      // Log::info('SendEmailListener triggered for Course ID: ', ['Course_id' => $event->Course->id]);
+      $this->mailService->send($event->Course);
     }
-    public function failed(StoreProgramEvent $event, \Throwable $exception): void
+    public function failed(StoreCourseEvent $event, \Throwable $exception): void
     {
       // 실패 시 로깅 등 추가 처리 가능
-      Log::error('SendEmailListener failed for Program ID: ', ['program_id' => $event->program->id, 'error' => $exception->getMessage()]);
+      Log::error('SendEmailListener failed for Course ID: ', ['Course_id' => $event->Course->id, 'error' => $exception->getMessage()]);
     }
 }
